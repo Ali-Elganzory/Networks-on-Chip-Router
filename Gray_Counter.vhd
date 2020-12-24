@@ -7,7 +7,7 @@ use work.Router_pkg.bus_array;
 
 entity Gray_Counter is
 	generic (
-			counter_width : integer := 4
+			counter_width : integer := 2
 		);
 
 	port (

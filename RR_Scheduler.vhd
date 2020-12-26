@@ -28,7 +28,7 @@ begin
 		end if;
 	end process;
 
-	ns: process (current_state, clock) is
+	ns: process (current_state) is
 	begin
 		case current_state is
 		when port1 =>
@@ -42,7 +42,9 @@ begin
 		end case;
 	end process;
 
-	op: process (current_state) is
+	-- the output is independent on the input
+	-- din1, din2, din3, din4 are added to synthesis a combinational circuit
+	op: process (current_state, din1, din2, din3, din4) is
 	begin
 		case current_state is
 		when port1 =>

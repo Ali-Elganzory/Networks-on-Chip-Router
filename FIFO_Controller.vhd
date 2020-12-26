@@ -2,6 +2,8 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all; 
 
+use work.Router_pkg.Gray_Counter;
+
 
 entity FIFO_Controller is
 	generic (
@@ -29,35 +31,37 @@ architecture arch_FIFO_Controller of FIFO_Controller is
 	signal is_empty   : std_logic;
 	signal is_full    : std_logic;
 	signal last_op    : std_logic;
+	signal rd_valid   : std_logic;
+	signal wr_valid   : std_logic;
 
 begin
-	reading: process (reset, rdclk) is
-	begin
-		if reset = '1' then
-			read_ptr <= (others => '0');
-		elsif rising_edge(rdclk) then
-			if rreq = '1' and is_empty = '0' then
-				read_valid <= '1';
-				read_ptr <= read_ptr + 1;
-			else
-				read_valid <= '0';
-			end if;
-		end if;
-	end process;
+	rdpointer: Gray_Counter 
+	generic map (
+		counter_width => addr_width
+	)
+	port map (
+		Reset     => reset,
+		En        => rd_valid,
+		Clock     => rdclk,
+		Count_out => read_ptr
+	);
 
-	writing: process (reset, wrclk) is
-	begin
-		if reset = '1' then
-			write_ptr <= (others => '0');
-		elsif rising_edge(wrclk) then
-			if wreq = '1' and is_full = '0' then
-				write_valid <= '1';
-				write_ptr <= write_ptr + 1;
-			else
-				write_valid <= '0';
-			end if;
-		end if;
-	end process;
+	wrpointer: Gray_Counter 
+	generic map (
+		counter_width => addr_width
+	)
+	port map (
+		Reset     => reset,
+		En        => wr_valid,
+		Clock     => wrclk,
+		Count_out => write_ptr
+	);
+
+	read_valid  <= rd_valid;
+	write_valid <= wr_valid;
+
+	rd_valid <= rreq and not is_empty;
+	wr_valid <= wreq and not is_full;
 
 	lastop: process (reset, rdclk, wrclk) is
 	begin

@@ -10,7 +10,7 @@ end;
 
 architecture arch_tb_RR_Scheduler of tb_RR_Scheduler is
 	signal din1, din2, din3, din4 : std_logic_vector(bus_width-1 downto 0);
-	signal reset : std_logic;
+	signal reset : std_logic := '0';
 	signal clock : std_logic := '0';
 	signal dout  : std_logic_vector(bus_width-1 downto 0);
 
@@ -36,10 +36,12 @@ begin
 		din3 <= "01111000";
 		din4 <= "01111100";
 
-		reset <= '1';
-		wait for 20 ns;
 		reset <= '0';
-		wait for 20 ns;
+		wait for 10 ns;
+		reset <= '1';
+		wait for 10 ns;
+		reset <= '0';
+
 		assert dout = din1 report "Wrong port for 1st state" severity warning;
 		wait for 20 ns;
 		assert dout = din2 report "Wrong port for 1st state" severity warning;

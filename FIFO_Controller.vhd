@@ -35,6 +35,7 @@ architecture arch_FIFO_Controller of FIFO_Controller is
 	signal wr_valid   : std_logic;
 
 begin
+
 	rdpointer: Gray_Counter 
 	generic map (
 		counter_width => addr_width
@@ -64,21 +65,31 @@ begin
 	wr_valid <= wreq and not is_full;
 
 	lastop: process (reset, rdclk, wrclk) is
+		variable wr_rising_edge, rd_rising_edge : Boolean;
 	begin
 		if reset = '1' then
 			last_op <= '0';
-		elsif rising_edge(rdclk) and rising_edge(wrclk) then
-			if rreq = '1' and is_empty = '0' and wreq = '1' and is_full = '0' then
-				last_op <= last_op;
-			elsif rreq = '1' and is_empty = '0' then
+
+		else
+			wr_rising_edge := rising_edge(wrclk);
+			rd_rising_edge := rising_edge(rdclk);
+
+			if rd_rising_edge and wr_rising_edge then
+				if (rd_valid and wr_valid) = '1' then
+					last_op <= last_op;
+				elsif rd_valid = '1' then
+					last_op <= '0';
+				elsif wr_valid = '1' then
+					last_op <= '1';
+				end if;
+			elsif rd_rising_edge and rd_valid = '1' then
 				last_op <= '0';
-			elsif wreq = '1' and is_full = '0' then
+			elsif wr_rising_edge and wr_valid = '1' then
 				last_op <= '1';
 			end if;
-		elsif rising_edge(rdclk) and rreq = '1' and is_empty = '0' then
-				last_op <= '0';
-		elsif rising_edge(wrclk) and wreq = '1' and is_full = '0' then
-				last_op <= '1';
+
+			wr_rising_edge := false;
+			rd_rising_edge := false;
 		end if;
 	end process;
 

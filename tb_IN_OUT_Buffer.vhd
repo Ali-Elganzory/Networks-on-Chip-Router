@@ -45,15 +45,15 @@ begin
 		Clock_En <= '1';
 		Ready_in <= '1';
 		Data_in  <= (others => '1');
-		wait for 40 ns;
+		wait for 30 ns;
 
 		Ready_in <= '0';
 		Data_in  <= (0 => '0', 1 => '0', others => '1');
-		wait for 20 ns;
+		wait for 40 ns;
 
 		Ready_in <= '1';
 		Data_in  <= (0 => '1', 1 => '1', others => '0');
-		wait for 20 ns;
+		wait for 30 ns;
 
 		wait;
 	end process;

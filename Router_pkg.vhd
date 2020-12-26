@@ -99,17 +99,12 @@ package Router_pkg is
 			);
 	end component;
 
-	component MUX is
-		generic (
-				de_mux_sel_c : integer := de_mux_sel_c;
-				bus_width    : integer := bus_width
-			);
-
-		port(
-				En    : in std_logic;
-				Sel   : in std_logic_vector(de_mux_sel_c-1 downto 0);
-				d_in  : in bus_array (0 to 2**de_mux_sel_c-1);
-				d_out : out std_logic_vector(bus_width-1 downto 0) 				
+	component RR_Scheduler is
+		port (
+				din1, din2, din3, din4 : in std_logic_vector(bus_width-1 downto 0);
+				reset : in std_logic;
+				clock : in std_logic;
+				dout  : out std_logic_vector(bus_width-1 downto 0)
 			);
 	end component;
 

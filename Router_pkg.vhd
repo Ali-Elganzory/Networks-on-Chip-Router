@@ -37,7 +37,8 @@ package Router_pkg is
 				En    : in std_logic;
 				Sel   : in std_logic_vector(de_mux_sel_c-1 downto 0);
 				d_in  : in std_logic_vector(bus_width-1 downto 0);
- 				d_out : out bus_array (0 to 2**de_mux_sel_c-1)
+ 				d_out : out bus_array (0 to 2**de_mux_sel_c-1);
+				wreq  : out std_logic_vector(0 to 2**de_mux_sel_c-1)
 			);
 	end component;
 
@@ -104,7 +105,8 @@ package Router_pkg is
 				din1, din2, din3, din4 : in std_logic_vector(bus_width-1 downto 0);
 				reset : in std_logic;
 				clock : in std_logic;
-				dout  : out std_logic_vector(bus_width-1 downto 0)
+				dout  : out std_logic_vector(bus_width-1 downto 0);
+				rreqs : out std_logic_vector(0 to 3)
 			);
 	end component;
 
@@ -131,7 +133,6 @@ package Router_pkg is
 				wclock   : in std_logic;
 				rclock   : in std_logic;
 				wr1, wr2, wr3, wr4 			   : in std_logic;
-				rd1, rd2, rd3, rd4 			   : out std_logic;
 				datai1, datai2, datai3, datai4 : in std_logic_vector(bus_width-1 downto 0);
 				datao1, datao2, datao3, datao4 : out std_logic_vector(bus_width-1 downto 0)
 			);

@@ -13,6 +13,7 @@ architecture arch_tb_RR_Scheduler of tb_RR_Scheduler is
 	signal reset : std_logic := '0';
 	signal clock : std_logic := '0';
 	signal dout  : std_logic_vector(bus_width-1 downto 0);
+	signal rreqs : std_logic_vector(0 to 3);
 
 begin
 	clk: process is
@@ -25,7 +26,8 @@ begin
 		din1 => din1, din2 => din2, din3 => din3, din4 => din4,
 		reset => reset,
 		clock => clock,
-		dout  => dout
+		dout  => dout,
+		rreqs => rreqs
 	);
 
 	tb: process is
@@ -42,7 +44,8 @@ begin
 		wait for 10 ns;
 		reset <= '0';
 
-		assert dout = din1 report "Wrong port for 1st state" severity warning;
+		assert dout  = din1   report "Wrong port for 1st state" severity warning;
+		assert rreqs = "1000" report "Wrong port for 1st state" severity warning;
 		wait for 20 ns;
 		assert dout = din2 report "Wrong port for 1st state" severity warning;
 		wait for 20 ns;

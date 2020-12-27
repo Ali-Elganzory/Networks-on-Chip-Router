@@ -9,7 +9,8 @@ entity RR_Scheduler is
 			din1, din2, din3, din4 : in std_logic_vector(bus_width-1 downto 0);
 			reset : in std_logic;
 			clock : in std_logic;
-			dout  : out std_logic_vector(bus_width-1 downto 0)
+			dout  : out std_logic_vector(bus_width-1 downto 0);
+			rreqs : out std_logic_vector(0 to 3)
 		);
 end;
 
@@ -48,13 +49,17 @@ begin
 	begin
 		case current_state is
 		when port1 =>
-			dout <= din1;
+			dout  <= din1;
+			rreqs <= "1000";
 		when port2 =>
 			dout <= din2;
+			rreqs <= "0100";
 		when port3 =>
 			dout <= din3;
+			rreqs <= "0010";
 		when others =>
 			dout <= din4;
+			rreqs <= "0001";
 		end case;
 	end process;
 end;

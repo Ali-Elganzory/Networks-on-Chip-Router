@@ -15,7 +15,8 @@ entity DeMUX is
 			En    : in std_logic;
 			Sel   : in std_logic_vector(de_mux_sel_c-1 downto 0);
 			d_in  : in std_logic_vector(bus_width-1 downto 0);
- 			d_out : out bus_array (0 to 2**de_mux_sel_c-1)
+ 			d_out : out bus_array (0 to 2**de_mux_sel_c-1);
+			wreq  : out std_logic_vector(0 to 2**de_mux_sel_c-1)
 		);
 end;
 
@@ -26,6 +27,7 @@ begin
 	begin
 		if En = '1' then
 			d_out(to_integer(unsigned(Sel))) <= d_in;
+			wreq <= (0 to to_integer(unsigned(Sel)) - 1 => '0') & '1' & (to_integer(unsigned(Sel)) + 1 to 2**de_mux_sel_c-1 => '0');
 		end if;
 	end process;
 end;

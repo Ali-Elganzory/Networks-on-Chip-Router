@@ -12,14 +12,16 @@ architecture arch_tb_DeMUX of tb_DeMUX is
 	signal Sel   : std_logic_vector(de_mux_sel_c-1 downto 0);
 	signal d_in  : std_logic_vector(bus_width-1 downto 0);
  	signal d_out : bus_array (0 to 2**de_mux_sel_c-1);
+	signal wreq  : std_logic_vector(0 to 2**de_mux_sel_c-1);
 
 begin
 	-- Register instance and mapping.
 	de_mux: DeMUX port map (
-		En => En,
-		Sel => Sel,
-		d_in => d_in,
-		d_out => d_out
+		En    => En,
+		Sel   => Sel,
+		d_in  => d_in,
+		d_out => d_out,
+		wreq  => wreq
 	);
 
 	tb: process is

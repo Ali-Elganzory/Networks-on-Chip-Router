@@ -13,7 +13,6 @@ architecture arch_tb_Router of tb_Router is
 	signal wclock   : std_logic := '1';
 	signal rclock   : std_logic := '1';
 	signal wr1, wr2, wr3, wr4 			  : std_logic;
-	signal rd1, rd2, rd3, rd4 			  : std_logic;
 	signal datai1, datai2, datai3, datai4 : std_logic_vector(bus_width-1 downto 0);
 	signal datao1, datao2, datao3, datao4 : std_logic_vector(bus_width-1 downto 0);
 
@@ -25,7 +24,6 @@ begin
 		wclock => wclock,
 		rclock => rclock,
 		wr1 => wr1, wr2 => wr2, wr3 => wr3, wr4 => wr4,
-		rd1 => rd1, rd2 => rd2, rd3 => rd3, rd4 => rd4,
 		datai1 => datai1, datai2 => datai2, datai3 => datai3, datai4 => datai4,
 		datao1 => datao1, datao2 => datao2, datao3 => datao3, datao4 => datao4
 	);
@@ -44,19 +42,26 @@ begin
 		wr2    <= '0';
 		wr3    <= '0';
 		wr4    <= '0';
+
+		datai1 <= "01100000";
+		datai2 <= "01101001";
+		datai3 <= "11101110";
+		datai4 <= "11111111";
+
 		rst    <= '1';
 		wait for 5 ns;
 		rst    <= '0';
-		wait for 55 ns;
+		wait for 5 ns;
 
-		wr1    <= '1';
-		datai1 <= "01100000";
-		wait for 20 ns;
-		wr1    <= '0';
-		wr2    <= '1';
-		datai2 <= "11101000";
-		wait for 20 ns;
-		wr2    <= '0';
+		wr1 <= '1';
+		wr2 <= '1';
+		wr3 <= '1';
+		wr4 <= '1';
+		wait for 30 ns;
+		wr1 <= '0';
+		wr2 <= '0';
+		wr3 <= '0';
+		wr4 <= '0';
 		wait for 120 ns;
 
 		wait;

@@ -24,10 +24,13 @@ architecture arch_DeMUX of DeMUX is
 
 begin
 	process (Sel, d_in) is
+		variable new_wreq : std_logic_vector(0 to 3);
 	begin
 		if En = '1' then
 			d_out(to_integer(unsigned(Sel))) <= d_in;
-			wreq <= (0 to to_integer(unsigned(Sel)) - 1 => '0') & '1' & (to_integer(unsigned(Sel)) + 1 to 2**de_mux_sel_c-1 => '0');
+			new_wreq := (others => '0');
+			new_wreq(to_integer(unsigned(Sel))) := '1';
+			wreq <= new_wreq;
 		end if;
 	end process;
 end;

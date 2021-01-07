@@ -94,7 +94,6 @@ package Router_pkg is
 				wreq        : in std_logic;
 				datain      : in std_logic_vector(bus_width-1 downto 0);
 				dataout     : out std_logic_vector(bus_width-1 downto 0);
-				read_ok     : out std_logic;
 				empty       : out std_logic;
 				full        : out std_logic
 			);

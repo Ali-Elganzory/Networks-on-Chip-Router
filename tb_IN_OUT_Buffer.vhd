@@ -35,25 +35,33 @@ begin
 	end process;
 
 	tb: process is
+		variable in1 : std_logic_vector(bus_width-1 downto 0) := "00001111";
+		variable in2 : std_logic_vector(bus_width-1 downto 0) := "00001100";
 	begin
 		Reset <= '0';
-		wait for 5 ns;
+		wait for 10 ns;
 		Reset <= '1';
-		wait for 5 ns;
+		wait for 10 ns;
 		Reset <= '0';
 		
+		-- Buffer in1
 		Clock_En <= '1';
 		Ready_in <= '1';
-		Data_in  <= (others => '1');
-		wait for 30 ns;
+		Data_in  <= in1;
+		wait for 20 ns;
+		assert Data_out = in1 report "Wrong output from Buffer" severity warning;
 
+		-- Not ready buffer
 		Ready_in <= '0';
-		Data_in  <= (0 => '0', 1 => '0', others => '1');
-		wait for 40 ns;
+		Data_in  <= in2;
+		wait for 20 ns;
+		assert Data_out = in1 report "Wrong output from Buffer" severity warning;
 
+		-- Buffer in2
 		Ready_in <= '1';
-		Data_in  <= (0 => '1', 1 => '1', others => '0');
-		wait for 30 ns;
+		Data_in  <= in2;
+		wait for 20 ns;
+		assert Data_out = in2 report "Wrong output from Buffer" severity warning;
 
 		wait;
 	end process;

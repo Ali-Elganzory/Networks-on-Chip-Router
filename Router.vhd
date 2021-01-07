@@ -41,7 +41,6 @@ architecture arch_Router of Router is
 
 	-- output of Output Queues
 	signal q_out   : bus_array (0 to 15);
-	signal q_read  : std_logic_vector(0 to 15);
 	signal q_empty : std_logic_vector(0 to 15);
 	signal q_full  : std_logic_vector(0 to 15);
 
@@ -106,7 +105,6 @@ begin
 			wreq    => fifo_wreq(i),
 			datain  => DeMUX_out(i),
 			dataout => q_out(i),
-			read_ok => q_read(i),
 			empty   => q_empty(i),
 			full    => q_full(i)
 		);

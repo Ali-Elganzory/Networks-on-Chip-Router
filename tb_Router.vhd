@@ -50,6 +50,14 @@ begin
 		rst    <= '0';
 		wait for 10 ns;
 
+		-- Test Idle state
+			
+		wr1    <= '0';
+		wr2    <= '0';
+		wr3    <= '0';
+		wr4    <= '0';
+		wait for 60 ns;
+
 		-- Input 4 packets via all 4 ports simultaneously
 		-- routed to all 4 output ports
 		packet1 := "01100000";	-- 1st FIFO of 1st port

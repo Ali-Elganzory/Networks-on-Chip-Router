@@ -92,7 +92,7 @@ begin
 
 	----  wreq  ----
 	wreq_s: for i in 0 to 15 generate
-		fifo_wreq(i) <= IB_ready(i / 4) and pack_pcheck(i / 4) and DeMUX_wr(i);
+		fifo_wreq(i) <= IB_ready(i mod 4) and pack_pcheck(i mod 4) and DeMUX_wr(i);
 	end generate;
 	
 	----  Output Queues (FIFOs)  ----

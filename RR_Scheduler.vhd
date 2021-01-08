@@ -57,7 +57,7 @@ begin
 		when port3 =>
 			dout <= din3;
 			rreqs <= "0010";
-		when others =>
+		when port4 =>
 			dout <= din4;
 			rreqs <= "0001";
 		end case;

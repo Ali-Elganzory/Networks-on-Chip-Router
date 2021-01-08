@@ -25,26 +25,31 @@ begin
 	);
 
 	tb: process is
+		variable in1 : std_logic_vector(bus_width-1 downto 0) := (0 => '1', others => '0');
+		variable in2 : std_logic_vector(bus_width-1 downto 0) := (others => '1');
+		variable in3 : std_logic_vector(bus_width-1 downto 0) := (0 => '1', 1 => '1', others => '0');
 	begin
 		En <= '1';
 		
-		Sel <= (0 => '1', others => '0');
-		d_in <= (others => '1');
+		Sel <= "00";
+		d_in <= in1;
 		wait for 20 ns;
+		assert d_out(0) = in1   report "Wrong output" severity warning;
 
-		Sel <= (1 => '1', others => '0');
-		d_in <= (0 => '0', 1 => '0', others => '1');
+		Sel <= "01";
+		d_in <= in2;
 		wait for 20 ns;
+		assert d_out(1) = in2   report "Wrong output" severity warning;
 
-		Sel <= (others => '0');
-		d_in <= (0 => '1', 1 => '1', others => '0');
+		Sel <= "10";
+		d_in <= in3;
 		wait for 20 ns;
+		assert d_out(2) = in3   report "Wrong output" severity warning;
 
-		Sel <= (others => '1');
-		d_in <= (0 => '1', 1 => '1', others => '0');
+		Sel <= "11";
+		d_in <= in1;
 		wait for 20 ns;
-
-		wait for 60 ns;
+		assert d_out(3) = in1   report "Wrong output" severity warning;
 
 		wait;
 	end process;

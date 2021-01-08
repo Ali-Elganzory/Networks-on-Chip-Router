@@ -26,7 +26,7 @@ begin
 		if Reset = '1' then
 			Data_out  <= (others => '0');
 			Ready_out <= '0';
-		elsif Clock_En = '1' and rising_edge(Clock) and Ready_in = '1' then
+		elsif Clock_En = '1' and rising_edge(Clock) then
 			Data_out  <= Data_in;
 			Ready_out <= Ready_in;
 		end if;

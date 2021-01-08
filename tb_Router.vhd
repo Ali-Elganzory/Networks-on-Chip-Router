@@ -10,8 +10,8 @@ end;
 
 architecture arch_tb_Router of tb_Router is
 	signal rst      : std_logic;
-	signal wclock   : std_logic := '1';
-	signal rclock   : std_logic := '1';
+	signal wclock   : std_logic := '0';
+	signal rclock   : std_logic := '0';
 	signal wr1, wr2, wr3, wr4 			  : std_logic;
 	signal datai1, datai2, datai3, datai4 : std_logic_vector(bus_width-1 downto 0);
 	signal datao1, datao2, datao3, datao4 : std_logic_vector(bus_width-1 downto 0);
@@ -36,6 +36,7 @@ begin
 	end process;
 
 	tb: process is
+		variable packet1, packet2, packet3, packet4 : std_logic_vector(bus_width-1 downto 0);
 	begin
 	
 		wr1    <= '0';
@@ -43,26 +44,51 @@ begin
 		wr3    <= '0';
 		wr4    <= '0';
 
-		datai1 <= "01100000";
-		datai2 <= "01101001";
-		datai3 <= "11101110";
-		datai4 <= "11111111";
-
+		-- Reset the Router
 		rst    <= '1';
-		wait for 5 ns;
+		wait for 10 ns;
 		rst    <= '0';
-		wait for 5 ns;
+		wait for 10 ns;
+
+		-- Input 4 packets via all 4 ports simultaneously
+		-- routed to all 4 output ports
+		packet1 := "01100000";	-- 1st FIFO of 1st port
+		packet2 := "01101001";	-- 2nd FIFO of 2nd port
+		packet3 := "11101110";	-- 3rd FIFO of 3rd port
+		packet4 := "11111111";	-- 4th FIFO of 4th port
+
+		datai1 <= packet1;
+		datai2 <= packet2;
+		datai3 <= packet3;
+		datai4 <= packet4;
 
 		wr1 <= '1';
 		wr2 <= '1';
 		wr3 <= '1';
 		wr4 <= '1';
-		wait for 30 ns;
+		----  Datapath waiting  ----
+		-- 1 cycle to be in-buffered
+		wait for 20 ns;
 		wr1 <= '0';
 		wr2 <= '0';
 		wr3 <= '0';
 		wr4 <= '0';
-		wait for 120 ns;
+		-- 1 cycle in Switch Fabric
+		-- 1 cycle in FIFO
+		-- 1 cycle to be read from FIFO
+		-- 1-3 cycles in scheduling -> out-buffers
+		wait for 100 ns;
+
+		-- At this point the RR Scheduler picks the 4th FIFO.
+		-- each cycle it advances to the next FIFO at other port.
+		wait for 20 ns;
+		assert datao4 = packet4 report "Wrong packet" severity warning;
+		wait for 20 ns;
+		assert datao1 = packet1 report "Wrong packet" severity warning;
+		wait for 20 ns;
+		assert datao2 = packet2 report "Wrong packet" severity warning;
+		wait for 20 ns;
+		assert datao3 = packet3 report "Wrong packet" severity warning;
 
 		wait;
 
